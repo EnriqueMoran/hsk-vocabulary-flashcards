@@ -1,0 +1,136 @@
+body {
+	background-color: #32393C;
+}
+
+a:link {
+	color: white;
+	text-decoration: none;
+}
+
+a:visited {
+	color: white;
+	text-decoration: none;
+}
+
+ul:hover {
+	cursor: default;
+}
+
+.title {
+	font-family: "Tahoma";
+	font-size: 39px;
+	font-weight: 600;
+	color: #fe9801;
+	text-align: center;
+	margin-top: 15px;
+}
+
+.topMenu {
+	margin-top: 25px;
+	text-align: right;
+	margin-bottom: 35px;
+	font-family: "Arial";
+}
+
+.option {
+	margin-right: 7px;
+}
+
+.item {
+	display: inline-block;
+	text-align: center;
+	padding: 5px;
+	margin: 5px;
+	margin-bottom: 15px;
+	background-color: white;
+	cursor: default;
+}
+
+.item:hover {
+	background-color: #f1f1f1;
+}
+
+.character-info {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 50px;
+	z-index: 1;
+	float: left;
+	border: 1px solid black;
+	padding: 10px;
+  	box-shadow: 5px 10px 3px #2F2F2F;
+  	overflow: hidden;
+  	font-size: 18px;
+}
+
+.show {
+	display: block;
+}
+
+.pinyin {
+	color: green;
+	font-size: 18px;
+}
+
+.example {
+	font-size: 22px;
+}
+
+.addCharBox, .editCharBox {
+	background-color: white;
+	border: 2px solid black;
+	box-shadow: 5px 10px 3px #2F2F2F;
+	padding: 10px;
+	width: 450px;
+	padding-left: 30px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 150px;
+	margin-right: 150px;
+	visibility: hidden;
+	z-index: 10;
+}
+
+.boxButton {
+	margin-right: 10px;
+}
+
+.menu {
+	display: none;
+	position: absolute;
+	text-align: left;
+}
+
+.menu-options {
+	list-style-type: none;
+	background-color: white;
+	padding: 0;
+	margin: 0;
+	font-size: 18px;
+	display: inline-block;
+	border: 1px solid #6E6E6E;
+	box-shadow: 5px 5px 3px #2F2F2F;
+}
+
+.menu-option {
+	width: 100px;
+	padding: 5px;
+}
+
+.menu-option:hover {
+	background-color: #E1E1E1;
+}
+
+.footer {
+	margin-top: 100px;
+}
+
+#slash {
+	color: white;
+}
+
+#hanzi-list {
+	margin-right: 80px;
+}
