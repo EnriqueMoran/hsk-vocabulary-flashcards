@@ -45,6 +45,8 @@ function setHskLevel(level) {
 	hskLevel = level;
 	if(level == 0){
 		document.getElementById("title").innerHTML = "Extra Vocabulary list";
+		var query = 'level:' + level;
+		connection.send('find - ' + query);
 	} else {
 		document.getElementById("title").innerHTML = "HSK " + level + " Vocabulary list";
 		var query = 'level:' + level;
