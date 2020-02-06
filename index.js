@@ -1,4 +1,4 @@
-const url = '';    // add your own url and port
+const url = '';    // add your own url
 const connection = new WebSocket(url);
 
 
@@ -167,10 +167,11 @@ function showPinyin(hanziList) {
 
 		li.oncontextmenu = function(event) {    // get character data
 			event.preventDefault();
+			var scrollTop = window.pageYOffset || 0;
 			var menu = document.getElementById("menu");
 			menu.style.display = "block";
 			menu.style.left = event.x + 'px';
-			menu.style.top = event.y + 'px';
+			menu.style.top = event.y + scrollTop + 'px';
 			charInfo["character"] = hanzi.character;
 			charInfo["pinyin"] = hanzi.pinyin;
 			charInfo["meaning"] = hanzi.meaning;
