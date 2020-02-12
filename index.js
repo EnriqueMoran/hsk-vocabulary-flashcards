@@ -282,7 +282,7 @@ function editChar() {
 		example: document.getElementById("exampleEdit").value.trim(),
 		notes: document.getElementById("notesEdit").value.trim()
 	};
-	if(char.character == "" || char.pinyin == "" | char.meaning == "" | char.level == "") {
+	if(newValues.newValuesacter == "" || newValues.pinyin == "" | newValues.meaning == "" | newValues.level == "") {
 		alert("Character, pinyin and meaning field required!");
 	} else {
 		connection.send("updateOne - " + JSON.stringify(char) + " - " + JSON.stringify(newValues));
