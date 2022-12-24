@@ -1,19 +1,20 @@
 const http = require('http');
 
 const MongoClient = require('mongodb').MongoClient;
-const db_url = "mongodb://127.0.0.1:27017/";
+//const db_url = "mongodb://127.0.0.1:27017/";
+const db_url = "mongodb://db:27017/";
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: ___ })    // add same port used on index.js
+const wss = new WebSocket.Server({ port: 3000 })    // add same port used on index.js
 
-const db_name = "";    // add your own db name
-const collection_name = "";    // add your own collection name
+const db_name = "hskvocabulary";    // add your own db name
+const collection_name = "vocabulary";    // add your own collection name
 
 
 wss.on('connection', ws => {
   ws.on('message', message => {    // format -> {type - data1 - data2 (if exist)}
-    var type = message.split("-")[0].trim();
-    var message_data = message.split("-")[1].trim();
+    var type = String(message).split("-")[0].trim();
+    var message_data = String(message).split("-")[1].trim();
 
     if(type == "find") {
     	var query_one = message_data.split(":")[0];    // query key

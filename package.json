@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mongodb": "^3.5.9",
+    "websocket": "^1.0.32",
+    "ws": "^8.11.0"
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}

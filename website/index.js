@@ -1,4 +1,4 @@
-const url = '';    // add your own url
+const url = 'ws://127.0.0.1:3000';    // add your own url
 const connection = new WebSocket(url);
 
 
