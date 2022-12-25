@@ -26,7 +26,7 @@ services:
     container_name: apache_app
     image: httpd:latest
     volumes:
-      - ./website/:/usr/local/apache2/htdocs/
+      - ./website/:/usr/local/apache2/htdocs/hsk/
     ports:
       - "8080:80"
     depends_on:
