@@ -76,7 +76,7 @@ connection.onopen = () => {
 
 
 connection.onerror = error => {
-	console.log("Websocket error: " + error)
+	console.log("Websocket error: " + error.data)
 }
 
 

@@ -34,47 +34,23 @@ Download this project, using this command:
 git clone https://github.com/EnriqueMoran/hsk-vocabulary-flashcards.git
 ```
 
-Next, install Mongo and Node.js:
-```
-sudo apt-get install mongodb
-sudo apt-get install nodejs
-```
-
-Create a DataBase and Collection on Mongo to store the data (in this example the DB is hakvocabulary and the collection is vocabulary):
-```
-mongo
->>> use hskvocabulary;
->>> db.createCollection(vocabulary);
->>> exit
-```
-
-Add the data to DataBase:
-```
-mongoimport --db hskvocabulary --collection vocabulary --drop --file /path/to/your/file/file_name.json
-```
-
-Fill the required parameters on *index.js* and *main.js* with your own url (it can be localhost:8080):
+Fill the required parameters on *index.js* and *main.js* with your own url:
 ### index.js:
 ```
 const url = 'ws://localhost:8080';    // must have ws://
-const connection = new WebSocket(url);
-
 ```
 
-### main.js:
+Next, install docker-compose.
+
+Run docker-compose:
 ```
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 })   // use the same port as on index.js
-
-const db_name = "hskvocabulary";    // use the same database you created on MongoDB
-const collection_name = "vocabulary";    // use the same collection you created on MondoDB
-
+docker-compose up --build
 ```
 
-Place *main.js* at */var/www/html* and run the command:
+Import data (modify its content to import another file):
 ```
-node main.js 
-node main.js & (if you want to run the process in background)
+./import.sh
 ```
 
 Note: For changing anything in BBDD (user, pass, etc), first, /data/ must be empty!
+Access through X.X.X.X:8080/hsk
