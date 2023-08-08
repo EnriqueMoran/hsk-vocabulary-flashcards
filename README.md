@@ -76,3 +76,5 @@ Place *main.js* at */var/www/html* and run the command:
 node main.js 
 node main.js & (if you want to run the process in background)
 ```
+
+Note: For changing anything in BBDD (user, pass, etc), first, /data/ must be empty!

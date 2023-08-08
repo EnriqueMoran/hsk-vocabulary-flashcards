@@ -1,8 +1,11 @@
 const http = require('http');
 
 const MongoClient = require('mongodb').MongoClient;
-//const db_url = "mongodb://127.0.0.1:27017/";
-const db_url = "mongodb://db:27017/";
+
+const user = "admin"
+const pass = "n5QXBTA6RYWmvZq7"
+const port = "27017"
+const db_url = "mongodb://"+user+":"+pass+"@db:"+port+"/";
 
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 3000 })    // add same port used on index.js

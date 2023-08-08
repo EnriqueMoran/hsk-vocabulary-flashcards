@@ -28,7 +28,7 @@ services:
     container_name: apache_app
     image: httpd:latest
     volumes:
-      - ./website/:/usr/local/apache2/htdocs/
+      - ./website/:/usr/local/apache2/htdocs/hsk/
     ports:
       - "8080:80"
     depends_on:
@@ -40,4 +40,8 @@ services:
     volumes:
       - ./data:/data/db
     ports:
-      - "27017:27017"
+      - "30017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: n5QXBTA6RYWmvZq7
+      MONGO_INITDB_DATABASE: hskvocabulary
