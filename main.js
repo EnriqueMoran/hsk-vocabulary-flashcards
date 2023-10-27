@@ -55,7 +55,7 @@ wss.on('connection', ws => {
 		});
 
     } else if (type == "updateOne") {
-    	var new_values = {$set: JSON.parse(message.split("-")[2].trim())};
+    	var new_values = {$set: JSON.parse(message.toString().split("-")[2].trim())};
     	MongoClient.connect(db_url, function(err, db) {
 	  		if (err) throw err;
 	  		var dbo = db.db(db_name);

@@ -37,7 +37,7 @@ git clone https://github.com/EnriqueMoran/hsk-vocabulary-flashcards.git
 Fill the required parameters on *index.js* and *main.js* with your own url:
 ### index.js:
 ```
-const url = 'ws://localhost:8080';    // must have ws://
+const url = 'ws://localhost:3000';    // must have ws://
 ```
 
 Next, install docker-compose.
@@ -47,9 +47,9 @@ Run docker-compose:
 docker-compose up --build
 ```
 
-Import data (modify its content to import another file):
+Import data:
 ```
-./import.sh
+./import_data.sh hsk1_data.json
 ```
 
 Note: For changing anything in BBDD (user, pass, etc), first, /data/ must be empty!

@@ -34,12 +34,14 @@ services:
 
   db:
     container_name: mongo_app
-    image: mongo:latest
+    image: mongo:5.0.6
     volumes:
-      - ./data:/data/db
+      - mongodata:/data/db
     ports:
       - "30017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: n5QXBTA6RYWmvZq7
       MONGO_INITDB_DATABASE: hskvocabulary
+volumes:
+        mongodata:
