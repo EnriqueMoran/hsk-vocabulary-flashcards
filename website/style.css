@@ -1,14 +1,14 @@
 body {
-	background-color: #32393C;
+	background-color: #202224;
 }
 
 a:link {
-	color: white;
+	color: #f1f1f1;
 	text-decoration: none;
 }
 
 a:visited {
-	color: white;
+	color: #f1f1f1;
 	text-decoration: none;
 }
 
@@ -26,10 +26,11 @@ ul:hover {
 }
 
 .topMenu {
-	margin-top: 25px;
-	text-align: right;
+	margin-top: 30px;
+	text-align: left;
 	margin-bottom: 35px;
 	font-family: "Arial";
+	margin-left: 10px;
 }
 
 .option {
@@ -42,24 +43,25 @@ ul:hover {
 	padding: 5px;
 	margin: 5px;
 	margin-bottom: 15px;
-	background-color: white;
+	background-color: #181A1B;
+	color: #f1f1f1;
 	cursor: default;
 }
 
 .item:hover {
-	background-color: #f1f1f1;
+	background-color: #2C2F30;
 }
 
 .character-info {
 	display: none;
 	position: absolute;
-	background-color: #f1f1f1;
+	background-color: #212324;
 	min-width: 50px;
 	z-index: 1;
 	float: left;
-	border: 1px solid black;
+	border: 1px solid #8A8275;
 	padding: 10px;
-  	box-shadow: 5px 10px 3px #2F2F2F;
+  	box-shadow: 5px 10px 3px #27292B;
   	overflow: hidden;
   	font-size: 18px;
 }
@@ -69,18 +71,30 @@ ul:hover {
 }
 
 .pinyin {
-	color: green;
+	color: #98FC83;
+	font-size: 18px;
+}
+
+.meaning {
+	color: #E8E6E3;
 	font-size: 18px;
 }
 
 .example {
+	color: #E8E6E3;
 	font-size: 22px;
 }
 
-.addCharBox, .editCharBox {
-	background-color: white;
-	border: 2px solid black;
-	box-shadow: 5px 10px 3px #2F2F2F;
+.notes {
+	color: #E8E6E3;
+	font-size: 18px;
+}
+
+
+.addCharBox, .editCharBox, .addGrammarBox, .editGrammarBox{
+	background-color: #212324;
+	border: 2px solid #8A8275;
+	box-shadow: 5px 10px 3px #27292B;
 	padding: 10px;
 	width: 450px;
 	padding-left: 30px;
@@ -91,6 +105,8 @@ ul:hover {
 	margin-right: 150px;
 	visibility: hidden;
 	z-index: 10;
+	color: #E8E6E3;
+	font-family: "Tahoma";
 }
 
 .boxButton {
@@ -103,15 +119,22 @@ ul:hover {
 	text-align: left;
 }
 
+.menu-grammar {
+	display: none;
+	position: absolute;
+	text-align: left;
+}
+
 .menu-options {
 	list-style-type: none;
-	background-color: white;
+	background-color: #212324;
 	padding: 0;
 	margin: 0;
 	font-size: 18px;
 	display: inline-block;
 	border: 1px solid #6E6E6E;
 	box-shadow: 5px 5px 3px #2F2F2F;
+	color: #E8E6E3;
 }
 
 .menu-option {
@@ -120,7 +143,7 @@ ul:hover {
 }
 
 .menu-option:hover {
-	background-color: #E1E1E1;
+	background-color: #2A2C2E;
 }
 
 .footer {
@@ -128,9 +151,81 @@ ul:hover {
 }
 
 #slash {
-	color: white;
+	color: #f1f1f1;
 }
 
 #hanzi-list {
-	margin-right: 80px;
+	margin-right: 400px;
+	margin-bottom: 180px;
+}
+
+.character-details-content {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 350px; /* Ancho del panel */
+	height: 100%;
+	overflow-y: auto;
+	background-color: #27292B;
+	border: 7px solid #2D2F30;
+}
+
+.grammar-details-content {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 350px; /* Ancho del panel */
+	height: 100%;
+	overflow-y: auto;
+	background-color: #27292B;
+	border: 7px solid #2D2F30;
+	display: none;
+}
+
+#detail-title {
+	text-align: center;
+	font-family: "Microsoft YaHei";
+	font-size: 56px;
+	font-weight: 350;
+	margin-top: 15px;
+	margin-bottom: 5px;
+	color: #f1f1f1;
+}
+
+#detail-pinyin {
+	text-align: left;
+	font-family: "Tahoma";
+	display: inline-block;
+	color: #f1f1f1;
+}
+
+#detail-meaning {
+	text-align: left;
+	font-family: "Tahoma";
+	display: inline-block;
+	color: #f1f1f1;
+}
+
+#detail-other {
+	text-align: left;
+	font-family: "Tahoma";
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #f1f1f1;
+}
+
+#detail-row {
+	font-family: "Tahoma";
+	margin-top: 20px;
+	color: #f1f1f1;
+	margin-left: 5px;
+}
+
+.detail-other {
+	white-space: pre-line;
+}
+
+.option {
+	margin-right: 7px;
 }

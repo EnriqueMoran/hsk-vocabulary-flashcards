@@ -4,7 +4,9 @@
 	"meaning" : "ah",
 	"level" : "1",
 	"example" : "你好棒啊！",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -13,7 +15,9 @@
 	"meaning" : "to love",
 	"level" : "1",
 	"example" : "我爱你",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -22,7 +26,9 @@
 	"meaning" : "eight",
 	"level" : "1",
 	"example" : "他八岁。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -31,7 +37,9 @@
 	"meaning" : "dad",
 	"level" : "1",
 	"example" : "我明天要陪爸爸去看医生。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -40,7 +48,9 @@
 	"meaning" : "particle used to indicate suggestion, request or instruction",
 	"level" : "1",
 	"example" : "我们去看电影吧！",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -49,7 +59,9 @@
 	"meaning" : "white",
 	"level" : "1",
 	"example" : "她穿着一件白色（的）衬衫。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -58,7 +70,9 @@
 	"meaning" : "hundred",
 	"level" : "1",
 	"example" : "这个六百钱，太贵了啊！",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -67,7 +81,9 @@
 	"meaning" : "move (something)",
 	"level" : "1",
 	"example" : "我打算这个月搬家。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -76,7 +92,9 @@
 	"meaning" : "half",
 	"level" : "1",
 	"example" : "现在八点半。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }
 
 {
@@ -85,5 +103,7 @@
 	"meaning" : "way (solution)",
 	"level" : "1",
 	"example" : "没有其他办法。",
-	"notes" : ""
+	"notes" : "",
+	"other" : "",
+	"type" : "character"
 }

@@ -14,11 +14,13 @@ Data is stored in MongoDB using the following structure:
 ```
 {
     "character": "",
-    "pinyin" : "",
-    "meaning" : "",
-    "level" : "",
-    "example" : "",
-    "notes" : ""
+    "pinyin"   : "",
+    "meaning"  : "",
+    "level"    : "",
+    "example"  : "",
+    "notes"    : "",
+    "other"    : "",
+    "type"     : ""
 }
 ```
 

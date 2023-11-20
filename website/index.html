@@ -8,17 +8,19 @@
 <body>
 	<div class="title" id="title">HSK Vocabulary list</div>
 	<div class="topMenu">
+		<a href="#" class="option" onclick="setHskLevel(-1)">ALL</a>
 		<a href="#" class="option" onclick="setHskLevel(1)">HSK1</a>
 		<a href="#" class="option" onclick="setHskLevel(2)">HSK2</a>
 		<a href="#" class="option" onclick="setHskLevel(3)">HSK3</a>
 		<a href="#" class="option" onclick="setHskLevel(4)">HSK4</a>
 		<a href="#" class="option" onclick="setHskLevel(5)">HSK5</a>
 		<a href="#" class="option" onclick="setHskLevel(6)">HSK6</a>
-		<a href="#" class="option" onclick="setHskLevel(0)">Extra</a>
-		<a href="#" class="addCharacter" onclick="showAddChar()">Add new character</a> <br><br>
-		<a href="#" onclick="changeContent(true)">中文</a>
+		<a href="#" class="option" onclick="setHskLevel(0)">EXTRA</a>
+		<a href="#" class="option" onclick="showAddChar()">Add character</a>
+		<a href="#" class="option" onclick="showAddGrammar()">Add grammar</a> <br><br>
+		<a href="#" onclick="changeContent(true)">Vocabulary</a>
 		<span id="slash"> / </span>
-		<a href="#" onclick="changeContent(false)">pīnyīn</a>
+		<a href="#" onclick="changeContent(false)">Grammar</a>
 	</div>
 
 	<ul id="hanzi-list">
@@ -30,14 +32,28 @@
 	<div class="addCharBox" id="addCharBox">
 		<b>Add new character</b><br><br>
 		Character: <input type="text" name="character" id="characterInput"><br><br>
-		Pinyin: <input type="text" name="pinyin" id="pinyinInput" required="required"><br><br>
-		Meaning: <input type="text" name="meaning" id="meaningInput" required="required"><br><br>
-		Level: <input type="text" name="level" id="levelInput" required="required"><br><br>
-		Example: <input type="text" name="example" size="40" id="exampleInput"><br><br>
-		Notes: <input type="text" name="notes" size="50" id="notesInput"><br><br>
+		Pinyin:    <input type="text" name="pinyin" id="pinyinInput" required="required"><br><br>
+		Meaning:   <input type="text" name="meaning" id="meaningInput" required="required"><br><br>
+		Level:     <input type="text" name="level" id="levelInput" required="required"><br><br>
+		Example:   <input type="text" name="example" size="40" id="exampleInput"><br><br>
+		Notes:     <input type="text" name="notes" size="50" id="notesInput"><br><br>
+		Other: <br>
+		<textarea name="other" rows="4" cols="50" style="width: 300px; resize: none;" id="otherInput"></textarea><br><br>
 		<div class="boxButtons">
 			<input type="submit" class="boxButton" value="Submit" onclick="addChar()">
 			<input type="button" class="boxButton" value="Cancel" onclick="hideAddChar()">
+		</div>		
+	</div>
+
+	<div class="addGrammarBox" id="addGrammarBox">
+		<b>Add new character</b><br><br>
+		Title: <input type="text" name="character" id="characterInputGrammar"><br><br>
+		Level:     <input type="text" name="level" id="levelInputGrammar" required="required"><br><br>
+		Other: <br>
+		<textarea name="other" rows="4" cols="50" style="width: 300px; resize: none;" id="otherInputGrammar"></textarea><br><br>
+		<div class="boxButtons">
+			<input type="submit" class="boxButton" value="Submit" onclick="addGrammar()">
+			<input type="button" class="boxButton" value="Cancel" onclick="hideAddGrammar()">
 		</div>		
 	</div>
 
@@ -49,6 +65,12 @@
   		</ul>
 	</div>
 
+	<div class="menu-grammar" id="menu-grammar">
+		<ul class="menu-options">
+		    <li class="menu-option" onclick="showEditGrammar()">Edit</li>
+		    <li class="menu-option" onclick="deleteGrammar()">Delete</li>
+  		</ul>
+	</div>
 
 	<div class="editCharBox" id="editCharBox">
 		<b>Edit character</b><br><br>
@@ -58,10 +80,61 @@
 		Level: <input type="text" name="level" id="levelEdit"><br><br>
 		Example: <input type="text" name="example" size="40" id="exampleEdit"><br><br>
 		Notes: <input type="text" name="notes" size="50" id="notesEdit"><br><br>
+		Other: <br>
+		<textarea name="other" rows="4" cols="50" style="width: 300px; resize: none;" id="otherEdit"></textarea><br><br>
 		<div class="boxButtons">
 			<input type="submit" class="boxButton" value="Submit" onclick="editChar()">
 			<input type="button" class="boxButton" value="Cancel" onclick="hideEditChar()">
 		</div>		
+	</div>
+
+	<div class="editGrammarBox" id="editGrammarBox">
+		<b>Edit Grammar</b><br><br>
+		Title: <input type="text" name="title" id="titleEdit" required="required"><br><br>
+		Level: <input type="text" name="level" id="levelEditGrammar"><br><br>
+		Other: <br>
+		<textarea name="other" rows="4" cols="50" style="width: 300px; resize: none;" id="otherEditGrammar"></textarea><br><br>
+		<div class="boxButtons">
+			<input type="submit" class="boxButton" value="Submit" onclick="editGrammar()">
+			<input type="button" class="boxButton" value="Cancel" onclick="hideEditGrammar()">
+		</div>		
+	</div>
+
+	<div class="character-details">
+		<div class="character-details-content">
+			<div class="detail-title" id="detail-title">爱</div>
+			<div class="detail-row" id="detail-row">
+				<b>Pinyin: </b><div class="detail-pinyin" id="detail-pinyin">ài</div>
+			</div>
+			
+			<div class="detail-row" id="detail-row">
+				<b>Meaning: </b><div class="detail-meaning" id="detail-meaning">Amar</div>
+			</div>
+
+			<div class="detail-row" id="detail-row">
+				<b>Notes: </b>
+				<div class="detail-other" id="detail-other" >我爱我的家庭。
+					I love my family.
+
+					他们彼此深深地相爱。
+					They deeply love each other.
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="grammar-details">
+		<div class="grammar-details-content" id="grammar-details-content">
+			<div class="detail-title" id="detail-title">Grammar</div>
+
+			<div class="detail-row" id="detail-row">
+				<b>Notes: </b>
+				<div class="detail-other" id="detail-other" >
+				</div>
+			</div>
+			
+		</div>
 	</div>
 
 

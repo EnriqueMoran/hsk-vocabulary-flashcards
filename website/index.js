@@ -2,24 +2,26 @@ const url = 'ws://127.0.0.1:3000';    // add your own url
 const connection = new WebSocket(url);
 
 
-var character = true;    // character view is active
-var hskLevel;    // hsk level character list to display
-var charInfo = {
-				"character": "",    // character to edit
-				"pinyin": "",
-				"meaning": "",
-				"example": "",
-				"level": "",
-				"notes": ""
-			};
+var hskLevel = -1;            // hsk level character list to display
+var character = true;         // character view is active
+var charInfo  = {
+				 "character": "",
+				 "pinyin": "",
+				 "meaning": "",
+				 "example": "",
+				 "level": "",
+				 "notes": "",
+				 "other": "",
+				 "type": ""
+			    };
 
 
-function start() {
-	connection.send('find - ');    // show all characters
+function start() {    // Initialize website and show all characters
+	connection.send('find - type:character');
 }
 
-     
-function showContent() {    // adjust items size
+
+function showContent() {    // Adjust items size
 	var items = document.getElementsByClassName('item');
   	for(i = 0; i < items.length; i++) {
   		if(character){
@@ -32,45 +34,80 @@ function showContent() {    // adjust items size
 }
 
 
-function changeContent(content) {    // change between showing characters and pinyin
+function changeContent(content) {    // Switch between showing characters and grammar
 	character = content;
-	document.getElementById("hanzi-list").innerHTML = "";    // remove other hsk level characters
-	connection.send('find - level:' + hskLevel);
+	document.getElementById("hanzi-list").innerHTML = "";    // Remove other hsk level characters
+
+	query = 'find -';
+	title = "HSK " + hskLevel + " Vocabulary list";
+
+	if(hskLevel == 0) {
+		title = "Extra Vocabulary list";
+		query = query + ' level:' + hskLevel;
+	} else if (hskLevel == -1){
+		title = "HSK Vocabulary list";
+		query = 'find -';
+	}
+	if (!character)
+	{	
+		title = "HSK Grammar list";
+		if(hskLevel == 0) {
+			title = "Extra Grammar list";
+		} else if (hskLevel != -1){
+			title = "HSK " + hskLevel + " Grammar list";
+		}
+	}
+	document.getElementById("title").innerHTML = title;
+	connection.send(query);
+	
 	showContent();
 }
 
 
 function setHskLevel(level) {
-	document.getElementById("hanzi-list").innerHTML = "";    // remove other hsk level characters
-	hskLevel = level;
-	if(level == 0){
-		document.getElementById("title").innerHTML = "Extra Vocabulary list";
-		var query = 'level:' + level;
-		connection.send('find - ' + query);
-	} else {
-		document.getElementById("title").innerHTML = "HSK " + level + " Vocabulary list";
-		var query = 'level:' + level;
-		connection.send('find - ' + query);
+	document.getElementById("hanzi-list").innerHTML = "";    // Remove other hsk level characters
+	hskLevel  = level;
+	var title = "HSK Vocabulary list";
+	query = 'find -';
+
+	if(hskLevel == 0) {
+		title = "Extra Vocabulary list";
+		query = query + ' level:' + hskLevel;
+	} else if (hskLevel != -1){
+		title = "HSK " + hskLevel + " Vocabulary list";
+		query = query + ' level:' + hskLevel;
 	}
+	if (!character)
+	{	
+		title = "HSK Grammar list";
+		if(hskLevel == 0) {
+			title = "Extra Grammar list";
+		} else if (hskLevel != -1){
+			title = "HSK " + hskLevel + " Grammar list";
+		}
+	}
+	document.getElementById("title").innerHTML = title;
+	connection.send(query);
 }
 
 
-function showInfo(event) {    // show character data (when mouse is over it)
+function showInfo(event) {    // Show character data on mouse hovering
 	var element = document.getElementById('info');
+
 	element.style.position = "absolute";
+	element.style.left     = event.target.getBoundingClientRect().x +'px';
+	element.style.top      = (event.target.getBoundingClientRect().y + 70) +'px';
 	element.classList.toggle("show");
-	element.style.left = event.target.getBoundingClientRect().x +'px';
-	element.style.top = (event.target.getBoundingClientRect().y + 70) +'px';
 }
 
 
-function removeInfo() {
+function hideInfo() {
 	document.getElementById("info").classList.remove("show");
 }
 
 
 connection.onopen = () => {
-	console.log("Connection established")
+	console.log("Connection established");
 	start();
 }
 
@@ -82,116 +119,117 @@ connection.onerror = error => {
 
 connection.onmessage = e => {
 	var object = JSON.parse(e.data)
-  	if(character){
-  		showHanzi(object);
-  	}else{
-  		showPinyin(object);
-  	}
-  	
+	showData(object);
 }
 
 
-function showHanzi(hanziList) {
+function sortResultsById(hanziList) {
+    hanziList.sort(function(a, b) {
+		const aId = a._id.$oid || (a._id && a._id.toString()) || '';
+        const bId = b._id.$oid || (b._id && b._id.toString()) || '';
+        return aId.localeCompare(bId);
+    });
+    return hanziList;
+}
+
+
+function showData(hanziList) {
 	var ul = document.getElementById("hanzi-list");
+	hanziList = sortResultsById(hanziList);
+
 	hanziList.forEach(function (hanzi){
 		var li = document.createElement("li");
 		li.setAttribute("class", "item");
 
-		li.onmouseover = function(event) {
-			var scrollTop = window.pageYOffset || 0;
-			var element = document.getElementById('info');
-			element.style.position = "absolute";
-			element.classList.toggle("show");
-			element.style.left = (event.target.getBoundingClientRect().x + 10) +'px';
-			element.style.top = (event.target.getBoundingClientRect().y + 60 + scrollTop) +'px';
-			element.innerHTML = '<div class="pinyin">' + hanzi.pinyin + '</div><br>' + hanzi.meaning + '<br>';
+		li.setAttribute("data-character", hanzi.character);
+		li.setAttribute("data-pinyin", hanzi.pinyin);
+		li.setAttribute("data-meaning", hanzi.meaning);
+		li.setAttribute("data-example", hanzi.example);
+		li.setAttribute("data-notes", hanzi.notes);
+		li.setAttribute("data-other", hanzi.other);
+		li.setAttribute("data-type", hanzi.type);
 
-			if(hanzi.example != null && hanzi.example != "") {
-				element.innerHTML += '<br><div class="example">' + hanzi.example + '</div>';
-			}
-			if(hanzi.notes != null && hanzi.notes != "") {
-				element.innerHTML += '<br>' + hanzi.notes;
-			}
-		};
+		if (character && hanzi.type == "character")
+		{
+			li.onmouseover = function(event) {
+				var scrollTop = window.pageYOffset || 0;
+				var element   = document.getElementById('info');
+	
+				element.style.position = "absolute";		
+				element.style.left     = (event.target.getBoundingClientRect().x + 10) +'px';
+				element.style.top      = (event.target.getBoundingClientRect().y + 60 + scrollTop) +'px';
+				element.innerHTML      = '<div class="pinyin">' + hanzi.pinyin + '</div><br>' + '<div class="meaning">' + hanzi.meaning + '</div>';
+				element.classList.toggle("show");
+	
+				if(hanzi.example != null && hanzi.example != "") {
+					element.innerHTML += '<br><div class="example">' + hanzi.example + '</div>';
+				}
+	
+				if(hanzi.notes != null && hanzi.notes != "") {
+					element.innerHTML += '<br><div class="notes">' + hanzi.notes + '</div>';
+				}
+			};
+	
+			li.oncontextmenu = function(event) {    // Get character data
+				event.preventDefault();
+				var scrollTop = window.pageYOffset || 0;
+				var menu      = document.getElementById("menu");
+	
+				menu.style.display = "block";
+				menu.style.left    = event.x + 'px';
+				menu.style.top     = event.y + scrollTop + 'px';
+	
+				charInfo["character"] = hanzi.character;
+				charInfo["pinyin"]    = hanzi.pinyin;
+				charInfo["meaning"]   = hanzi.meaning;
+				charInfo["level"]     = hanzi.level;
+	
+				if(hanzi.example != null) {
+					charInfo["example"] = hanzi.example;
+				} else {
+					charInfo["example"] = "";
+				}
+	
+				if(hanzi.notes != null) {
+					charInfo["notes"] = hanzi.notes;
+				} else {
+					charInfo["notes"] = "";
+				}
+				if(hanzi.other != null) {
+					charInfo["other"] = hanzi.other;
+				} else {
+					charInfo["other"] = "";
+				}	
+			};
+			li.onmouseleave = hideInfo;
+			li.appendChild(document.createTextNode(hanzi.character));
+			ul.appendChild(li);
+		}
+		else if (!character && hanzi.type == "grammar")
+		{
+	
+			li.oncontextmenu = function(event) {    // Get character data
+				event.preventDefault();
+				var scrollTop = window.pageYOffset || 0;
+				var menu      = document.getElementById("menu-grammar");
+	
+				menu.style.display = "block";
+				menu.style.left    = event.x + 'px';
+				menu.style.top     = event.y + scrollTop + 'px';
+	
+				charInfo["character"] = hanzi.character;
+				charInfo["level"]     = hanzi.level;
 
-		li.oncontextmenu = function(event) {    // get character data
-			event.preventDefault();
-			var scrollTop = window.pageYOffset || 0;
-			var menu = document.getElementById("menu");
-			menu.style.display = "block";
-			menu.style.left = event.x + 'px';
-			menu.style.top = event.y + scrollTop + 'px';
-			charInfo["character"] = hanzi.character;
-			charInfo["pinyin"] = hanzi.pinyin;
-			charInfo["meaning"] = hanzi.meaning;
-			charInfo["level"] = hanzi.level;
-
-			if(hanzi.example != null) {
-				charInfo["example"] = hanzi.example;
-			} else {
-				charInfo["example"] = "";
-			}
-			if(hanzi.notes != null) {
-				charInfo["notes"] = hanzi.notes;
-			} else {
-				charInfo["notes"] = "";
-			}		
-		};
-		li.onmouseleave = removeInfo;
-		li.appendChild(document.createTextNode(hanzi.character));
-		ul.appendChild(li);
-	});	
-	showContent();
-}
-
-
-function showPinyin(hanziList) {
-	var ul = document.getElementById("hanzi-list");
-	hanziList.forEach(function (hanzi){
-		var li = document.createElement("li");
-		li.setAttribute("class", "item");
-
-		li.onmouseover = function(event) {
-			var scrollTop = window.pageYOffset || 0;
-			var element = document.getElementById('info');
-			element.style.position = "absolute";
-			element.classList.toggle("show");
-			element.style.left = (event.target.getBoundingClientRect().x + 10) + 'px';
-			element.style.top = (event.target.getBoundingClientRect().y + 60 + scrollTop) + 'px';
-			element.innerHTML = '<div class="example">' + hanzi.character + '</div><br>' + hanzi.meaning + '<br>';
-			if(hanzi.example != null && hanzi.example != "") {
-				element.innerHTML += '<br>' + hanzi.example + '<br>';
-			}
-			if(hanzi.notes != null && hanzi.notes != "") {
-				element.innerHTML += '<br>' + hanzi.notes;
-			}
-		};
-
-		li.oncontextmenu = function(event) {    // get character data
-			event.preventDefault();
-			var scrollTop = window.pageYOffset || 0;
-			var menu = document.getElementById("menu");
-			menu.style.display = "block";
-			menu.style.left = event.x + 'px';
-			menu.style.top = event.y + scrollTop + 'px';
-			charInfo["character"] = hanzi.character;
-			charInfo["pinyin"] = hanzi.pinyin;
-			charInfo["meaning"] = hanzi.meaning;
-			charInfo["level"] = hanzi.level;
-			if(hanzi.example != null) {
-				charInfo["example"] = hanzi.example;
-			} else {
-				charInfo["example"] = "";
-			}
-			if(hanzi.notes != null) {
-				charInfo["notes"] = hanzi.notes;
-			} else {
-				charInfo["notes"] = "";
-			}
-		};
-		li.onmouseleave = removeInfo;
-		li.appendChild(document.createTextNode(hanzi.pinyin));
-		ul.appendChild(li);
+				if(hanzi.other != null) {
+					charInfo["other"] = hanzi.other;
+				} else {
+					charInfo["other"] = "";
+				}	
+			};
+			li.onmouseleave = hideInfo;
+			li.appendChild(document.createTextNode(hanzi.character));
+			ul.appendChild(li);
+		}
 	});	
 	showContent();
 }
@@ -202,32 +240,63 @@ function showAddChar() {
 }
 
 
-function hideAddChar() {    // hide and reset input fields
+function showAddGrammar() {
+	document.getElementById("addGrammarBox").style.visibility = "visible";
+}
+
+
+function hideAddChar() {    // Hide and reset input fields
 	document.getElementById("addCharBox").style.visibility = "hidden";
-	document.getElementById("characterInput").value = "";
-	document.getElementById("pinyinInput").value = "";
-	document.getElementById("meaningInput").value = "";
-	document.getElementById("levelInput").value = "";
-	document.getElementById("exampleInput").value = "";
-	document.getElementById("notesInput").value = "";
+	document.getElementById("characterInput").value        = "";
+	document.getElementById("pinyinInput").value           = "";
+	document.getElementById("meaningInput").value          = "";
+	document.getElementById("levelInput").value            = "";
+	document.getElementById("exampleInput").value          = "";
+	document.getElementById("notesInput").value            = "";
+	document.getElementById("otherInput").value            = "";
 }
 
 
-function showEditChar() {    // fill input fields with character data
+function hideAddGrammar() {    // Hide and reset input fields
+	document.getElementById("addGrammarBox").style.visibility = "hidden";
+	document.getElementById("characterInputGrammar").value    = "";
+	document.getElementById("levelInputGrammar").value        = "";
+	document.getElementById("otherInputGrammar").value        = "";
+}
+
+
+function showEditChar() {    // Fill input fields with character data
 	var scrollTop = window.pageYOffset || 0;
-	document.getElementById("editCharBox").style.top = 50 + scrollTop + 'px';
+	document.getElementById("editCharBox").style.top        = 50 + scrollTop + 'px';
 	document.getElementById("editCharBox").style.visibility = "visible";
-	document.getElementById("characterEdit").value = charInfo.character;
-	document.getElementById("pinyinEdit").value = charInfo.pinyin;
-	document.getElementById("meaningEdit").value = charInfo.meaning;
-	document.getElementById("levelEdit").value = charInfo.level;
-	document.getElementById("exampleEdit").value = charInfo.example;
-	document.getElementById("notesEdit").value = charInfo.notes;
+	document.getElementById("characterEdit").value          = charInfo.character;
+	document.getElementById("pinyinEdit").value             = charInfo.pinyin;
+	document.getElementById("meaningEdit").value            = charInfo.meaning;
+	document.getElementById("levelEdit").value              = charInfo.level;
+	document.getElementById("exampleEdit").value            = charInfo.example;
+	document.getElementById("notesEdit").value              = charInfo.notes;
+	document.getElementById("otherEdit").value              = charInfo.other;
 }
 
 
-function hideEditChar() {    // hide input fields
+function showEditGrammar() {    // Fill input fields with grammar data
+	console.log(charInfo);
+	var scrollTop = window.pageYOffset || 0;
+	document.getElementById("editGrammarBox").style.top        = 50 + scrollTop + 'px';
+	document.getElementById("editGrammarBox").style.visibility = "visible";
+	document.getElementById("titleEdit").value                 = charInfo.character;
+	document.getElementById("levelEditGrammar").value          = charInfo.level;
+	document.getElementById("otherEditGrammar").value          = charInfo.other;
+}
+
+
+function hideEditChar() {    // Hide input fields
 	document.getElementById("editCharBox").style.visibility = "hidden";
+}
+
+
+function hideEditGrammar() {    // Hide input fields
+	document.getElementById("editGrammarBox").style.visibility = "hidden";
 }
 
 
@@ -238,19 +307,40 @@ function addChar() {
 		meaning: document.getElementById("meaningInput").value.trim(),
 		level: document.getElementById("levelInput").value.trim(),
 		example: document.getElementById("exampleInput").value.trim(),
-		notes: document.getElementById("notesInput").value.trim()
+		notes: document.getElementById("notesInput").value.trim(),
+		other: document.getElementById("otherInput").value.trim(),
+		type: "character"
 	};
 
 	if(char.character == "" || char.pinyin == "" | char.meaning == "" | char.level == "") {
 		alert("Character, pinyin and meaning field required!");
 	} else {
 		connection.send("insertOne - " + JSON.stringify(char));
-		location.reload();    // reload page
+		changeContent(true);
 	}
+	hideAddChar();
 }
 
 
-function deleteChar() {    // remove character from database
+function addGrammar() {
+	var char = {
+		character: document.getElementById("characterInputGrammar").value.trim(),
+		level: document.getElementById("levelInputGrammar").value.trim(),
+		other: document.getElementById("otherInputGrammar").value.trim(),
+		type: "grammar"
+	};
+
+	if(char.character == "" || char.level == "") {
+		alert("Title and level field required!");
+	} else {
+		connection.send("insertOne - " + JSON.stringify(char));
+		changeContent(false);
+	}
+	hideAddGrammar();
+}
+
+
+function deleteChar() {    // Remove character from database
 	var r = confirm("Remove character " + charInfo.character + "?");
 	if(r){
 		var char = {
@@ -259,10 +349,22 @@ function deleteChar() {    // remove character from database
 			meaning: charInfo.meaning,
 		};
 		connection.send("deleteOne - " + JSON.stringify(char));
-		location.reload();    // reload page
+		changeContent(character);
 	}
 }
 
+function deleteGrammar() {    // Remove grammar from database
+	var r = confirm("Remove character " + charInfo.character + "?");
+	if(r){
+		var char = {
+			character: charInfo.character,
+			level: charInfo.level,
+			other: charInfo.other,
+		};
+		connection.send("deleteOne - " + JSON.stringify(char));
+		changeContent(character);
+	}
+}
 
 function editChar() {
 	var char = {
@@ -271,26 +373,119 @@ function editChar() {
 		meaning: charInfo.meaning,
 		level: charInfo.level,
 		example: charInfo.example,
-		notes: charInfo.notes
+		notes: charInfo.notes,
+		other: charInfo.other
 	};
-
 	var newValues = {
 		character: document.getElementById("characterEdit").value.trim(),
 		pinyin: document.getElementById("pinyinEdit").value.trim(),
 		meaning: document.getElementById("meaningEdit").value.trim(),
 		level: document.getElementById("levelEdit").value.trim(),
 		example: document.getElementById("exampleEdit").value.trim(),
-		notes: document.getElementById("notesEdit").value.trim()
+		notes: document.getElementById("notesEdit").value.trim(),
+		other: document.getElementById("otherEdit").value.trim(),
+		type: "character"
 	};
-	if(newValues.newValuesacter == "" || newValues.pinyin == "" | newValues.meaning == "" | newValues.level == "") {
+	if(newValues.character == "" || newValues.pinyin == "" | newValues.meaning == "" | newValues.level == "") {
 		alert("Character, pinyin and meaning field required!");
 	} else {
 		connection.send("updateOne - " + JSON.stringify(char) + " - " + JSON.stringify(newValues));
-		location.reload();    // reload page
+		changeContent(true);
 	}
+	hideEditChar();
+}
+
+function editGrammar() {
+	var char = {
+		character: charInfo.character,
+		level: charInfo.level,
+		other: charInfo.other,
+		type: "grammar"
+	};
+	var newValues = {
+		character: document.getElementById("titleEdit").value.trim(),
+		level: document.getElementById("levelEditGrammar").value.trim(),
+		other: document.getElementById("otherEditGrammar").value.trim()
+	};
+	if(newValues.character == "" || newValues.level == "") {
+		alert("Character and level field required!");
+	} else {
+		connection.send("updateOne - " + JSON.stringify(char) + " - " + JSON.stringify(newValues));
+		changeContent(false);
+	}
+	hideEditGrammar();
 }
 
 
-document.addEventListener("click", function(e) {    // hide custom context menu
+document.addEventListener("click", function(e) {    // Hide custom context menu
 	document.getElementById("menu").style.display = "none";
+	document.getElementById("menu-grammar").style.display = "none";
+});
+
+
+document.addEventListener('click', function (e) {
+	if (!character)
+	{
+		document.getElementById("grammar-details-content").style.display = "block";
+	}
+	else
+	{
+		document.getElementById("grammar-details-content").style.display = "none";
+	}
+
+	if (e.target.classList.contains('item')) {
+
+		var char =  e.target.getAttribute("data-character");
+		var pinyin    =  e.target.getAttribute("data-pinyin");
+		var meaning   =  e.target.getAttribute("data-meaning");
+		var example   =  e.target.getAttribute("data-example");
+		var notes     =  e.target.getAttribute("data-notes");
+		var other     =  e.target.getAttribute("data-other");
+
+		try {
+			// Update detail information
+			var numberOfCharacters = character.length;
+		
+			var detailTitleDiv = document.getElementById('detail-title');
+		
+			if (numberOfCharacters > 17)
+			{
+				detailTitleDiv.style.fontSize = '18px';
+			}
+			else if (numberOfCharacters > 14)
+			{
+				detailTitleDiv.style.fontSize = '22px';
+			}
+			else if (numberOfCharacters > 10)
+			{
+				detailTitleDiv.style.fontSize = '26px';
+			}
+			else if (numberOfCharacters > 7)
+			{
+				detailTitleDiv.style.fontSize = '30px';
+			}
+			else if (numberOfCharacters > 5)
+			{
+				detailTitleDiv.style.fontSize = '48px';
+			}
+			else{
+				detailTitleDiv.style.fontSize = '56px';
+			}
+		
+			document.getElementById("detail-title").textContent = char;
+			document.getElementById("detail-pinyin").textContent = pinyin;
+			document.getElementById("detail-meaning").textContent = meaning;
+			document.getElementById("detail-other").textContent = other;
+		}
+		catch{
+	
+		}
+	}
+});
+
+
+document.body.addEventListener('click', function (e) {
+	if (!e.target.classList.contains('item')) {
+		console.log("click fuera");
+	}
 });
