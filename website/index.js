@@ -471,11 +471,20 @@ document.addEventListener('click', function (e) {
 			else{
 				detailTitleDiv.style.fontSize = '56px';
 			}
+
+			if (!character)
+			{
+				var detailTitleDiv = document.getElementById('detail-title-grammar');
+				detailTitleDiv.style.fontSize = '28px';
+			}
 		
 			document.getElementById("detail-title").textContent = char;
 			document.getElementById("detail-pinyin").textContent = pinyin;
 			document.getElementById("detail-meaning").textContent = meaning;
 			document.getElementById("detail-other").textContent = other;
+
+			document.getElementById("detail-title-grammar").textContent = char;
+			document.getElementById("detail-other-grammar").textContent = other;
 		}
 		catch{
 	

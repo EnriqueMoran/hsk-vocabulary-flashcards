@@ -192,6 +192,16 @@ ul:hover {
 	color: #f1f1f1;
 }
 
+#detail-title-grammar {
+	text-align: center;
+	font-family: "Microsoft YaHei";
+	font-size: 56px;
+	font-weight: 350;
+	margin-top: 15px;
+	margin-bottom: 5px;
+	color: #f1f1f1;
+}
+
 #detail-pinyin {
 	text-align: left;
 	font-family: "Tahoma";
@@ -207,6 +217,15 @@ ul:hover {
 }
 
 #detail-other {
+	text-align: left;
+	font-family: "Tahoma";
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #f1f1f1;
+}
+
+#detail-other-grammar {
 	text-align: left;
 	font-family: "Tahoma";
 	margin-top: 5px;
