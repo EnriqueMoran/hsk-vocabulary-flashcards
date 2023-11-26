@@ -134,20 +134,20 @@ function sortResultsById(hanziList) {
 
 
 function showData(hanziList) {
-	var ul = document.getElementById("hanzi-list");
-	hanziList = sortResultsById(hanziList);
+    var ul = document.getElementById("hanzi-list");
+    hanziList = sortResultsById(hanziList);
 
-	hanziList.forEach(function (hanzi){
-		var li = document.createElement("li");
-		li.setAttribute("class", "item");
+    hanziList.forEach(function (hanzi) {
+        var li = document.createElement("li");
+        li.setAttribute("class", "item");
 
-		li.setAttribute("data-character", hanzi.character);
-		li.setAttribute("data-pinyin", hanzi.pinyin);
-		li.setAttribute("data-meaning", hanzi.meaning);
-		li.setAttribute("data-example", hanzi.example);
-		li.setAttribute("data-notes", hanzi.notes);
-		li.setAttribute("data-other", hanzi.other);
-		li.setAttribute("data-type", hanzi.type);
+        li.setAttribute("data-character", hanzi.character);
+        li.setAttribute("data-pinyin", hanzi.pinyin);
+        li.setAttribute("data-meaning", hanzi.meaning);
+        li.setAttribute("data-example", hanzi.example);
+        li.setAttribute("data-notes", hanzi.notes);
+        li.setAttribute("data-other", hanzi.other);
+        li.setAttribute("data-type", hanzi.type);
 
 		if (character && hanzi.type == "character")
 		{

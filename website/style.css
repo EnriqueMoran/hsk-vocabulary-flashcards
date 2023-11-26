@@ -222,7 +222,9 @@ ul:hover {
 	margin-top: 5px;
 	margin-left: 10px;
 	margin-right: 10px;
+	margin-bottom: 15px;
 	color: #f1f1f1;
+	font-size: 16px;
 }
 
 #detail-other-grammar {
@@ -231,7 +233,9 @@ ul:hover {
 	margin-top: 5px;
 	margin-left: 10px;
 	margin-right: 10px;
+	margin-bottom: 15px;
 	color: #f1f1f1;
+	font-size: 16px;
 }
 
 #detail-row {
