@@ -56,3 +56,5 @@ Import data:
 
 Note: For changing anything in BBDD (user, pass, etc), first, /data/ must be empty!
 Access through X.X.X.X:8080/hsk
+
+Audio files taken from: https://github.com/hugolpz/audio-cmn

@@ -1,4 +1,4 @@
-const url = 'ws://127.0.0.1:3000';    // add your own url
+const url = 'ws://192.168.117.128:3000';    // add your own url
 const connection = new WebSocket(url);
 
 
@@ -149,6 +149,12 @@ function showData(hanziList) {
         li.setAttribute("data-other", hanzi.other);
         li.setAttribute("data-type", hanzi.type);
 
+
+		li.ondblclick = function(event) {
+			handleDoubleClick(event, hanzi);
+		}
+		
+
 		if (character && hanzi.type == "character")
 		{
 			li.onmouseover = function(event) {
@@ -232,6 +238,28 @@ function showData(hanziList) {
 		}
 	});	
 	showContent();
+}
+
+function handleDoubleClick(event, hanzi) {
+	playCharacterSound(hanzi.character);
+	//playCharacterLocal(hanzi.character);
+}
+
+function playCharacterSound(character) {
+	var audioURL = `https://data.dong-chinese.com/hsk-audio/${character}.mp3`;
+	var audio = new Audio(audioURL);
+	audio.play().catch(function(error) {
+		console.log(`Couldnt play audio for: ${audioURL}`);
+	})
+}
+
+function playCharacterLocal(character) {
+	var encodedCharacter = encodeURIComponent(character);
+	var audioURL = `audio/$cmn-${encodedCharacter}.mp3`;
+	var audio = new Audio(audioURL);
+	audio.play().catch(function(error) {
+		console.log(`Couldnt play audio for: ${audioURL}`);
+	})
 }
 
 
