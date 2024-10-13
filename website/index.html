@@ -20,7 +20,11 @@
 		<a href="#" class="option" onclick="showAddGrammar()">Add grammar</a> <br><br>
 		<a href="#" onclick="changeContent(true)">Vocabulary</a>
 		<span id="slash"> / </span>
-		<a href="#" onclick="changeContent(false)">Grammar</a>
+		<a href="#" class="option" onclick="changeContent(false)">Grammar</a>
+		<span id="filterLabel">Filter </span>
+		<select id="tagFilter" onchange="filterByTag()">
+			<option value="All">All</option>
+		</select>
 	</div>
 
 	<ul id="hanzi-list">
@@ -35,8 +39,7 @@
 		Pinyin:    <input type="text" name="pinyin" id="pinyinInput" required="required"><br><br>
 		Meaning:   <input type="text" name="meaning" id="meaningInput" required="required"><br><br>
 		Level:     <input type="text" name="level" id="levelInput" required="required"><br><br>
-		Example:   <input type="text" name="example" size="40" id="exampleInput"><br><br>
-		Notes:     <input type="text" name="notes" size="50" id="notesInput"><br><br>
+		Tags:      <input type="text" name="tags" id="tagsInput"><br><br>
 		Other: <br>
 		<textarea name="other" rows="4" cols="50" style="width: 300px; " id="otherInput"></textarea><br><br>
 		<div class="boxButtons">
@@ -78,8 +81,7 @@
 		Pinyin: <input type="text" name="pinyin" id="pinyinEdit" required="required"><br><br>
 		Meaning: <input type="text" name="meaning" id="meaningEdit" required="required"><br><br>
 		Level: <input type="text" name="level" id="levelEdit"><br><br>
-		Example: <input type="text" name="example" size="40" id="exampleEdit"><br><br>
-		Notes: <input type="text" name="notes" size="50" id="notesEdit"><br><br>
+		Tags:  <input type="text" name="tags" id="tagsEdit"><br><br>
 		Other: <br>
 		<textarea name="other" rows="4" cols="50" style="width: 300px; " id="otherEdit"></textarea><br><br>
 		<div class="boxButtons">
@@ -112,7 +114,7 @@
 			</div>
 
 			<div class="detail-row" id="detail-row">
-				<b>Notes: </b>
+				<br>
 				<div class="detail-other" id="detail-other" >我爱我的家庭。
 					I love my family.
 
@@ -129,7 +131,6 @@
 			<div class="detail-title" id="detail-title-grammar">Grammar</div>
 
 			<div class="detail-row" id="detail-row">
-				<b>Notes: </b>
 				<div class="detail-other" id="detail-other-grammar" >
 				</div>
 			</div>

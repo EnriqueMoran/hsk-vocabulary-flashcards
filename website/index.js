@@ -1,23 +1,30 @@
-const url = 'ws://192.168.117.128:3000';    // add your own url
+const url = 'ws://127.0.0.1:3000';    // add your own url
 const connection = new WebSocket(url);
 
 
 var hskLevel = -1;            // hsk level character list to display
+var availableTags = [];       // avaliable tags
 var character = true;         // character view is active
 var charInfo  = {
 				 "character": "",
 				 "pinyin": "",
 				 "meaning": "",
-				 "example": "",
 				 "level": "",
-				 "notes": "",
+				 "tags": "",
 				 "other": "",
 				 "type": ""
 			    };
 
 
+
 function start() {    // Initialize website and show all characters
 	connection.send('find - type:character');
+	fetchAvailableTags(); 
+}
+
+
+function fetchAvailableTags() {
+    connection.send('findTags');  // Send a query to fetch all unique tags
 }
 
 
@@ -68,7 +75,7 @@ function setHskLevel(level) {
 	document.getElementById("hanzi-list").innerHTML = "";    // Remove other hsk level characters
 	hskLevel  = level;
 	var title = "HSK Vocabulary list";
-	query = 'find -';
+	query = 'find - type:character';
 
 	if(hskLevel == 0) {
 		title = "Extra Vocabulary list";
@@ -82,8 +89,13 @@ function setHskLevel(level) {
 		title = "HSK Grammar list";
 		if(hskLevel == 0) {
 			title = "Extra Grammar list";
+			query = 'find - type:grammar level:' + hskLevel;
 		} else if (hskLevel != -1){
 			title = "HSK " + hskLevel + " Grammar list";
+			query = 'find - type:grammar level:' + hskLevel;
+		}
+		else {
+			query = 'find - type:grammar';
 		}
 	}
 	document.getElementById("title").innerHTML = title;
@@ -119,7 +131,12 @@ connection.onerror = error => {
 
 connection.onmessage = e => {
 	var object = JSON.parse(e.data)
-	showData(object);
+	if (object.type === 'tags') {
+        availableTags = object.tags;  // Save tags list from response
+        updateTagFilter();            // Update the tag filter dropdown
+    } else {
+        showData(object);
+    }
 }
 
 
@@ -137,6 +154,8 @@ function showData(hanziList) {
     var ul = document.getElementById("hanzi-list");
     hanziList = sortResultsById(hanziList);
 
+    ul.innerHTML = "";
+
     hanziList.forEach(function (hanzi) {
         var li = document.createElement("li");
         li.setAttribute("class", "item");
@@ -144,8 +163,7 @@ function showData(hanziList) {
         li.setAttribute("data-character", hanzi.character);
         li.setAttribute("data-pinyin", hanzi.pinyin);
         li.setAttribute("data-meaning", hanzi.meaning);
-        li.setAttribute("data-example", hanzi.example);
-        li.setAttribute("data-notes", hanzi.notes);
+        li.setAttribute("data-tags", hanzi.tags ? hanzi.tags : "");
         li.setAttribute("data-other", hanzi.other);
         li.setAttribute("data-type", hanzi.type);
 
@@ -166,14 +184,6 @@ function showData(hanziList) {
 				element.style.top      = (event.target.getBoundingClientRect().y + 60 + scrollTop) +'px';
 				element.innerHTML      = '<div class="pinyin">' + hanzi.pinyin + '</div><br>' + '<div class="meaning">' + hanzi.meaning + '</div>';
 				element.classList.toggle("show");
-	
-				if(hanzi.example != null && hanzi.example != "") {
-					element.innerHTML += '<br><div class="example">' + hanzi.example + '</div>';
-				}
-	
-				if(hanzi.notes != null && hanzi.notes != "") {
-					element.innerHTML += '<br><div class="notes">' + hanzi.notes + '</div>';
-				}
 			};
 	
 			li.oncontextmenu = function(event) {    // Get character data
@@ -190,22 +200,25 @@ function showData(hanziList) {
 				charInfo["meaning"]   = hanzi.meaning;
 				charInfo["level"]     = hanzi.level;
 	
-				if(hanzi.example != null) {
-					charInfo["example"] = hanzi.example;
-				} else {
-					charInfo["example"] = "";
-				}
-	
-				if(hanzi.notes != null) {
-					charInfo["notes"] = hanzi.notes;
-				} else {
-					charInfo["notes"] = "";
-				}
 				if(hanzi.other != null) {
 					charInfo["other"] = hanzi.other;
 				} else {
 					charInfo["other"] = "";
 				}	
+				if(hanzi.tags != null) {
+                    charInfo["tags"] = hanzi.tags;
+					if (Array.isArray(hanzi.tags)) {
+						hanzi.tags.forEach(function(tag) {
+							if (!availableTags.includes(tag)) {
+								availableTags.push(tag);
+							}
+						});
+					}
+					
+                }
+				else {
+					charInfo["tags"] = "";
+				}
 			};
 			li.onmouseleave = hideInfo;
 			li.appendChild(document.createTextNode(hanzi.character));
@@ -239,6 +252,34 @@ function showData(hanziList) {
 	});	
 	showContent();
 }
+
+function updateTagFilter() {
+    var tagSelect = document.getElementById("tagFilter");
+    tagSelect.innerHTML = '<option value="All">All</option>';
+
+    availableTags.forEach(function(tag) {
+        var option = document.createElement("option");
+        option.value = tag;
+        option.textContent = tag;
+        tagSelect.appendChild(option);
+    });
+}
+
+function filterByTag() {
+    var selectedTag = document.getElementById("tagFilter").value;
+    var ul = document.getElementById("hanzi-list");
+    ul.innerHTML = "";
+
+    if (selectedTag === "All") {
+        connection.send('find - type:character');
+    } else {
+        if (selectedTag.includes(' ')) {
+            selectedTag = `"${selectedTag}"`;
+        }
+        connection.send(`find - tags:${selectedTag}`);
+    }
+}
+
 
 function handleDoubleClick(event, hanzi) {
 	playCharacterSound(hanzi.character);
@@ -278,9 +319,8 @@ function hideAddChar() {    // Hide and reset input fields
 	document.getElementById("characterInput").value        = "";
 	document.getElementById("pinyinInput").value           = "";
 	document.getElementById("meaningInput").value          = "";
+	document.getElementById("tagsInput").value            = "";
 	document.getElementById("levelInput").value            = "";
-	document.getElementById("exampleInput").value          = "";
-	document.getElementById("notesInput").value            = "";
 	document.getElementById("otherInput").value            = "";
 }
 
@@ -301,8 +341,7 @@ function showEditChar() {    // Fill input fields with character data
 	document.getElementById("pinyinEdit").value             = charInfo.pinyin;
 	document.getElementById("meaningEdit").value            = charInfo.meaning;
 	document.getElementById("levelEdit").value              = charInfo.level;
-	document.getElementById("exampleEdit").value            = charInfo.example;
-	document.getElementById("notesEdit").value              = charInfo.notes;
+	document.getElementById("tagsEdit").value               = charInfo.tags;
 	document.getElementById("otherEdit").value              = charInfo.other;
 }
 
@@ -333,9 +372,7 @@ function addChar() {
 		character: document.getElementById("characterInput").value.trim(),
 		pinyin: document.getElementById("pinyinInput").value.trim(),
 		meaning: document.getElementById("meaningInput").value.trim(),
-		level: document.getElementById("levelInput").value.trim(),
-		example: document.getElementById("exampleInput").value.trim(),
-		notes: document.getElementById("notesInput").value.trim(),
+		tags: document.getElementById("tagsInput").value.trim().split(',').map(tag => tag.trim()),
 		other: document.getElementById("otherInput").value.trim(),
 		type: "character"
 	};
@@ -345,8 +382,8 @@ function addChar() {
 	} else {
 		connection.send("insertOne - " + JSON.stringify(char));
 		changeContent(true);
+		hideAddChar();
 	}
-	hideAddChar();
 }
 
 
@@ -400,8 +437,7 @@ function editChar() {
 		pinyin: charInfo.pinyin,
 		meaning: charInfo.meaning,
 		level: charInfo.level,
-		example: charInfo.example,
-		notes: charInfo.notes,
+		tags: charInfo.tags,
 		other: charInfo.other
 	};
 	var newValues = {
@@ -409,8 +445,7 @@ function editChar() {
 		pinyin: document.getElementById("pinyinEdit").value.trim(),
 		meaning: document.getElementById("meaningEdit").value.trim(),
 		level: document.getElementById("levelEdit").value.trim(),
-		example: document.getElementById("exampleEdit").value.trim(),
-		notes: document.getElementById("notesEdit").value.trim(),
+		tags: document.getElementById("tagsEdit").value.trim().split(',').map(tag => tag.trim()),
 		other: document.getElementById("otherEdit").value.trim(),
 		type: "character"
 	};
@@ -418,9 +453,9 @@ function editChar() {
 		alert("Character, pinyin and meaning field required!");
 	} else {
 		connection.send("updateOne - " + JSON.stringify(char) + " - " + JSON.stringify(newValues));
-		changeContent(true);
+		hideEditChar();
+		//changeContent(true);
 	}
-	hideEditChar();
 }
 
 function editGrammar() {
@@ -466,8 +501,6 @@ document.addEventListener('click', function (e) {
 		var char =  e.target.getAttribute("data-character");
 		var pinyin    =  e.target.getAttribute("data-pinyin");
 		var meaning   =  e.target.getAttribute("data-meaning");
-		var example   =  e.target.getAttribute("data-example");
-		var notes     =  e.target.getAttribute("data-notes");
 		var other     =  e.target.getAttribute("data-other");
 
 		try {
@@ -523,6 +556,5 @@ document.addEventListener('click', function (e) {
 
 document.body.addEventListener('click', function (e) {
 	if (!e.target.classList.contains('item')) {
-		console.log("click fuera");
 	}
 });

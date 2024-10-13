@@ -251,4 +251,21 @@ ul:hover {
 
 .option {
 	margin-right: 7px;
+	border-radius: 0;
+}
+
+#tagFilter {
+    background-color: #2C2F30;
+    color: #f1f1f1;
+    border: 1px solid #8A8275;
+    font-size: 16px;
+    padding: 5px;
+    cursor: pointer;
+	width: 150px;
+	border-radius: 0;
+}
+
+#filterLabel {
+	margin-left: 20px;
+	color: #f1f1f1;
 }
