@@ -155,7 +155,7 @@ ul:hover {
 }
 
 #hanzi-list {
-	margin-right: 400px;
+	margin-right: 450px;
 	margin-bottom: 180px;
 }
 
@@ -163,7 +163,7 @@ ul:hover {
 	position: fixed;
 	top: 0;
 	right: 0;
-	width: 350px; /* Ancho del panel */
+	width: 400px;
 	height: 100%;
 	overflow-y: auto;
 	background-color: #27292B;
@@ -174,7 +174,7 @@ ul:hover {
 	position: fixed;
 	top: 0;
 	right: 0;
-	width: 350px; /* Ancho del panel */
+	width: 400px;
 	height: 100%;
 	overflow-y: auto;
 	background-color: #27292B;
@@ -210,6 +210,20 @@ ul:hover {
 }
 
 #detail-meaning {
+	text-align: left;
+	font-family: "Tahoma";
+	display: inline-block;
+	color: #f1f1f1;
+}
+
+#detail-level {
+	text-align: left;
+	font-family: "Tahoma";
+	display: inline-block;
+	color: #f1f1f1;
+}
+
+#detail-tags {
 	text-align: left;
 	font-family: "Tahoma";
 	display: inline-block;
@@ -269,3 +283,52 @@ ul:hover {
 	margin-left: 20px;
 	color: #f1f1f1;
 }
+
+#charSizeSlider {
+	margin-left: 30px;
+}
+
+input[type="range"] {
+	-webkit-appearance: none;
+	width: 150px;
+	height: 8px;
+	background: #444; 
+	outline: none;
+	border-radius: 10px;
+	opacity: 0.9;
+	transition: opacity 0.2s;
+	margin-left: 10px;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #ffffff; 
+	cursor: pointer;
+	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2); 
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #ffffff;
+	cursor: pointer;
+	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  input[type="range"]::-ms-thumb {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #ffffff;
+	cursor: pointer;
+	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  input[type="range"]:hover {
+	opacity: 1; 
+  }

@@ -40,6 +40,26 @@ function showContent() {    // Adjust items size
   	}
 }
 
+function adjustCharacterSize(size) {
+	const items = document.querySelectorAll('.item');
+	items.forEach(item => {
+	  item.style.fontSize = `${size}px`;
+	});
+  }
+
+function replaceHyphenWithSpace(event) {
+    // Replace all occurrences of '-' with a space
+    event.target.value = event.target.value.replace(/-/g, ' ');
+}
+
+function attachHyphenReplacement() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea'); // Select all text and number inputs
+    inputs.forEach(input => {
+        input.addEventListener('input', replaceHyphenWithSpace); // Add input event listener
+    });
+}
+
+document.addEventListener('DOMContentLoaded', attachHyphenReplacement);
 
 function changeContent(content) {    // Switch between showing characters and grammar
 	character = content;
@@ -162,6 +182,7 @@ function showData(hanziList) {
 
         li.setAttribute("data-character", hanzi.character);
         li.setAttribute("data-pinyin", hanzi.pinyin);
+		li.setAttribute("data-level", hanzi.level);
         li.setAttribute("data-meaning", hanzi.meaning);
         li.setAttribute("data-tags", hanzi.tags ? hanzi.tags : "");
         li.setAttribute("data-other", hanzi.other);
@@ -372,6 +393,7 @@ function addChar() {
 		character: document.getElementById("characterInput").value.trim(),
 		pinyin: document.getElementById("pinyinInput").value.trim(),
 		meaning: document.getElementById("meaningInput").value.trim(),
+		level: document.getElementById("levelInput").value.trim(),
 		tags: document.getElementById("tagsInput").value.trim().split(',').map(tag => tag.trim()),
 		other: document.getElementById("otherInput").value.trim(),
 		type: "character"
@@ -501,6 +523,8 @@ document.addEventListener('click', function (e) {
 		var char =  e.target.getAttribute("data-character");
 		var pinyin    =  e.target.getAttribute("data-pinyin");
 		var meaning   =  e.target.getAttribute("data-meaning");
+		var level     =  e.target.getAttribute("data-level");
+		var tags      =  e.target.getAttribute("data-tags");
 		var other     =  e.target.getAttribute("data-other");
 
 		try {
@@ -542,6 +566,8 @@ document.addEventListener('click', function (e) {
 			document.getElementById("detail-title").textContent = char;
 			document.getElementById("detail-pinyin").textContent = pinyin;
 			document.getElementById("detail-meaning").textContent = meaning;
+			document.getElementById("detail-level").textContent = level;
+			document.getElementById("detail-tags").textContent = tags;
 			document.getElementById("detail-other").textContent = other;
 
 			document.getElementById("detail-title-grammar").textContent = char;

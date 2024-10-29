@@ -25,6 +25,7 @@
 		<select id="tagFilter" onchange="filterByTag()">
 			<option value="All">All</option>
 		</select>
+		<input type="range" id="charSizeSlider" min="12" max="72" value="30" oninput="adjustCharacterSize(this.value)">
 	</div>
 
 	<ul id="hanzi-list">
@@ -111,6 +112,13 @@
 			
 			<div class="detail-row" id="detail-row">
 				<b>Meaning: </b><div class="detail-meaning" id="detail-meaning">Amar</div>
+			</div>
+
+			<div class="detail-row" id="detail-row">
+				<b>Level: </b><div class="detail-level" id="detail-level">1</div>
+			</div>
+			<div class="detail-row" id="detail-row">
+				<b>Tags: </b><div class="detail-tags" id="detail-tags"></div>
 			</div>
 
 			<div class="detail-row" id="detail-row">
