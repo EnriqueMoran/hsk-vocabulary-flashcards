@@ -154,6 +154,8 @@ connection.onmessage = e => {
 	if (object.type === 'tags') {
         availableTags = object.tags;  // Save tags list from response
         updateTagFilter();            // Update the tag filter dropdown
+		updateTagsDropdown('tagsDropdown', 'tagsInput');
+        updateTagsDropdown('tagsEditDropdown', 'tagsEdit');
     } else {
         showData(object);
     }
@@ -394,7 +396,7 @@ function addChar() {
 		pinyin: document.getElementById("pinyinInput").value.trim(),
 		meaning: document.getElementById("meaningInput").value.trim(),
 		level: document.getElementById("levelInput").value.trim(),
-		tags: document.getElementById("tagsInput").value.trim().split(',').map(tag => tag.trim()),
+		tags: document.getElementById("tagsInput").value.trim().split(',').map(tag => tag.trim()).filter(tag => tag !== ''),
 		other: document.getElementById("otherInput").value.trim(),
 		type: "character"
 	};
@@ -402,6 +404,14 @@ function addChar() {
 	if(char.character == "" || char.pinyin == "" | char.meaning == "" | char.level == "") {
 		alert("Character, pinyin and meaning field required!");
 	} else {
+		char.tags.forEach(tag => {
+            if (!availableTags.includes(tag)) {
+                availableTags.push(tag);
+            }
+        });
+
+        updateTagsDatalist();
+
 		connection.send("insertOne - " + JSON.stringify(char));
 		changeContent(true);
 		hideAddChar();
@@ -467,17 +477,31 @@ function editChar() {
 		pinyin: document.getElementById("pinyinEdit").value.trim(),
 		meaning: document.getElementById("meaningEdit").value.trim(),
 		level: document.getElementById("levelEdit").value.trim(),
-		tags: document.getElementById("tagsEdit").value.trim().split(',').map(tag => tag.trim()),
+		tags: document.getElementById("tagsEdit").value.trim().split(',').map(tag => tag.trim()).filter(tag => tag !== ''),
 		other: document.getElementById("otherEdit").value.trim(),
 		type: "character"
 	};
 	if(newValues.character == "" || newValues.pinyin == "" | newValues.meaning == "" | newValues.level == "") {
 		alert("Character, pinyin and meaning field required!");
 	} else {
+		newValues.tags.forEach(tag => {
+            if (!availableTags.includes(tag)) {
+                availableTags.push(tag);
+            }
+        });
+
+        updateTagsDatalist();
+
 		connection.send("updateOne - " + JSON.stringify(char) + " - " + JSON.stringify(newValues));
 		hideEditChar();
 		//changeContent(true);
 	}
+}
+
+function updateTagsDatalist() {
+    updateTagsDropdown('tagsDropdown', 'tagsInput');
+    // Update for "Edit Character" modal
+    updateTagsDropdown('tagsEditDropdown', 'tagsEdit');
 }
 
 function editGrammar() {
@@ -576,11 +600,59 @@ document.addEventListener('click', function (e) {
 		catch{
 	
 		}
+		const dropdowns = ['tagsDropdown', 'tagsEditDropdown'];
+		dropdowns.forEach(dropdownId => {
+			const dropdown = document.getElementById(dropdownId);
+			const button = document.querySelector(`[id="${dropdownId}Button"]`);
+			if (!dropdown.contains(e.target) && e.target !== button) {
+				dropdown.style.display = 'none';
+        }
+    });
+
 	}
 });
 
-
 document.body.addEventListener('click', function (e) {
+	// Click outside
 	if (!e.target.classList.contains('item')) {
 	}
+});
+
+function updateTagsDropdown(dropdownId, inputId) {
+    const dropdown = document.getElementById(dropdownId);
+    const input = document.getElementById(inputId);
+    dropdown.innerHTML = '';
+
+    availableTags.forEach(tag => {
+        const listItem = document.createElement('li');
+        listItem.textContent = tag;
+
+        listItem.addEventListener('click', () => {
+            let currentTags = input.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+            if (!currentTags.includes(tag)) {
+                currentTags.push(tag);
+            }
+
+            input.value = currentTags.join(', ') + ', ';
+            dropdown.style.display = 'none';
+        });
+
+        dropdown.appendChild(listItem);
+    });
+}
+
+function toggleDropdown(buttonId, dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+document.getElementById('tagsDropdownButton').addEventListener('click', () => {
+    toggleDropdown('tagsDropdownButton', 'tagsDropdown');
+    updateTagsDropdown('tagsDropdown', 'tagsInput');
+});
+
+document.getElementById('tagsEditDropdownButton').addEventListener('click', () => {
+    toggleDropdown('tagsEditDropdownButton', 'tagsEditDropdown');
+    updateTagsDropdown('tagsEditDropdown', 'tagsEdit');
 });

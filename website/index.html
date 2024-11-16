@@ -40,7 +40,15 @@
 		Pinyin:    <input type="text" name="pinyin" id="pinyinInput" required="required"><br><br>
 		Meaning:   <input type="text" name="meaning" id="meaningInput" required="required"><br><br>
 		Level:     <input type="text" name="level" id="levelInput" required="required"><br><br>
-		Tags:      <input type="text" name="tags" id="tagsInput"><br><br>
+		<div style="position: relative; width: 100%;">
+			Tags:
+			<input type="text" name="tags" id="tagsInput">
+			<button type="button" id="tagsDropdownButton" style="margin-left: 5px;">▼</button>
+			<ul id="tagsDropdown" class="tags-dropdown">
+				<!-- tags will be filled dynamically -->
+			</ul>
+		</div>
+		<br>
 		Other: <br>
 		<textarea name="other" rows="4" cols="50" style="width: 300px; " id="otherInput"></textarea><br><br>
 		<div class="boxButtons">
@@ -82,7 +90,15 @@
 		Pinyin: <input type="text" name="pinyin" id="pinyinEdit" required="required"><br><br>
 		Meaning: <input type="text" name="meaning" id="meaningEdit" required="required"><br><br>
 		Level: <input type="text" name="level" id="levelEdit"><br><br>
-		Tags:  <input type="text" name="tags" id="tagsEdit"><br><br>
+		<div style="position: relative; width: 100%;">
+			Tags:
+			<input type="text" name="tags" id="tagsEdit" placeholder="Add tags or select">
+			<button type="button" id="tagsEditDropdownButton" style="margin-left: 5px;">▼</button>
+			<ul id="tagsEditDropdown" class="tags-dropdown">
+				<!-- Options will update dynamically -->
+			</ul>
+		</div>
+		<br><br>
 		Other: <br>
 		<textarea name="other" rows="4" cols="50" style="width: 300px; " id="otherEdit"></textarea><br><br>
 		<div class="boxButtons">

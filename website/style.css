@@ -332,3 +332,105 @@ input[type="range"] {
   input[type="range"]:hover {
 	opacity: 1; 
   }
+
+#tagsDropdownButton {
+    background-color: #ffffff;
+    color: #212324;
+    border: 1px solid #6E6E6E;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+#tagsDropdownButton:hover {
+    background-color: #ffffff;
+}
+
+#tagsDropdown {
+    display: none; /* Hidden initially */
+    position: absolute;
+    background-color: #212324;
+    color: #E8E6E3;
+    border: 1px solid #6E6E6E;
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+    max-height: 500px; /* Increased height for the dropdown */
+    overflow-y: auto; /* Scrollable if content exceeds max-height */
+    z-index: 1000;
+    width: 200px; /* Fixed width for the dropdown */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+
+    top: -450%; 
+    right: 0;
+    transform: translateX(20%); /* Fine-tune positioning relative to the button */
+}
+
+#tagsDropdown li {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#tagsDropdown li:hover {
+    background-color: #2C2F30;
+    color: #ffffff;
+}
+
+#tagsDropdownButton {
+    background-color: #ffffff;
+    color: #212324;
+    border: 1px solid #6E6E6E;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+#tagsEditDropdownButton:hover {
+    background-color: #ffffff;
+}
+
+#tagsEditDropdown {
+    display: none; /* Hidden initially */
+    position: absolute;
+    background-color: #212324;
+    color: #E8E6E3;
+    border: 1px solid #6E6E6E;
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+    max-height: 500px; /* Increased height for the dropdown */
+    overflow-y: auto; /* Scrollable if content exceeds max-height */
+    z-index: 1000;
+    width: 200px; /* Fixed width for the dropdown */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+
+    top: -450%; 
+    right: 0;
+    transform: translateX(20%); /* Fine-tune positioning relative to the button */
+}
+
+#tagsEditDropdown li {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#tagsEditDropdown li:hover {
+    background-color: #2C2F30;
+    color: #ffffff;
+}
+
+#tagsEditDropdownButton {
+    background-color: #ffffff;
+    color: #212324;
+    border: 1px solid #6E6E6E;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
